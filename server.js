@@ -15,7 +15,7 @@ var nodePort = 3000;
 //Run mongod
 
 var db = mongojs('birds', ['sightings']);
-
+//         name of database     name of collection. Every Mongo DB creates folders/directories named 'Collections', 'Functions', & 'Users' by default. You can rename & create your own.
 app.post('/api/sighting', function(req, res) {  //we only use next inside middleware.
   var dataToInsert = req.body;
 
