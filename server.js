@@ -21,34 +21,21 @@ app.post('/api/sighting', function(req, res) {  //we only use next inside middle
 
   db.sightings.insert(dataToInsert, function(err, result) {
     if(err) {
-      res.status(500).end();
+      res.status(500).send('Failed to add new record');
     }
     res.send(result);
   });
-
+    console.log('POST success');
 });
 
 app.get('/api/sighting', function(req, res) {
   db.sightings.find({}, function(err, result) {
-    res.send(result);
-  });
-
-  console.log('get hit');
-});
-
-app.delete('/api/sighting/:id', function(req, res) {
-  //db.sightings.remove();
-
-  var idToDelete = objectId(req.params.id);
-
-  db.sightings.remove({_id:idToDelete}, function(err, result){
-    if(err || result.n === 0) {
-      res.status(500).send("Failed to delete");
+    if(err) {
+      res.status(500).send('Failed to retrieve record');
     }
-    res.send("Successfully deleted record");
+      res.send(result);
   });
-
-  console.log('delete hit');
+    console.log('GET success');
 });
 
 app.put('/api/sighting/:id', function (req, res) {
@@ -63,9 +50,26 @@ app.put('/api/sighting/:id', function (req, res) {
   };
 
   db.sightings.findAndModify(updateObject, function(err, result){
-      res.send("Tim is cool");
-    });
-      console.log("query completed");
+    if(err) {
+      res.status(500).send('Failed to modify record');
+    }
+    res.send('Data modification successful');
+  });
+  console.log('PUT success');
+});
+
+app.delete('/api/sighting/:id', function(req, res) {
+  //db.sightings.remove();
+
+  var idToDelete = ObjectId(req.params.id);
+
+  db.sightings.remove({_id:idToDelete}, function(err, result){
+    if(err) {
+      res.status(500).send('Failed to delete record');
+    }
+    res.send('Successfully deleted record');
+  });
+  console.log('DELETE success');
 });
 
 app.listen(nodePort, function(){
